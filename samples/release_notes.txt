@@ -1,0 +1,5 @@
+🚀 New Features
+- Added async support
+
+🐛 Bug Fixes
+- Fixed retry logic

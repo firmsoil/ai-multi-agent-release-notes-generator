@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "multi-agent-release-notes"
+version = "0.2.0"
+description = "Multi-agent release notes generator with async, retries, and logging"
+authors = [{name = "Anthropic AI Safety Team", email = "safety@anthropic.com"}]
+dependencies = [
+    "aiohttp>=3.9.0",
+    "openai>=1.0.0",
+    "pydantic>=2.0.0",
+    "tenacity>=8.0.0",
+    "structlog>=23.0.0",
+    "python-dotenv>=1.0.0",
+    "click>=8.0.0",
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+[project.scripts]
+generate-release-notes = "multi_agent_release_notes.main:cli"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/multi_agent_release_notes"]

@@ -1,0 +1,16 @@
+## Fallback Release Notes (Quota Exceeded)
+🚀 **New Features**
+- Update landing page for v1.0 launch (PR #762 - [Update landing page for v1.0 launch](https://github.com/slsa-framework/slsa/pull/762))
+- Fix formatting (PR #762 - [Update landing page for v1.0 launch](https://github.com/slsa-framework/slsa/pull/762))
+- Update docs/index.md
+
+Co-authored-by: Andrew McNamara <arewm@users.noreply.github.com>
+Signed-off-by: olivekl <83081275+olivekl@users.noreply.github.com> (PR #762 - [Update landing page for v1.0 launch](https://github.com/slsa-framework/slsa/pull/762))
+- Add quick RC2 announcement
+
+Signed-off-by: Michael Lieberman <mlieberman85@gmail.com> (PR #794 - [Add quick RC2 announcement](https://github.com/slsa-framework/slsa/pull/794))
+- Link to rc2 version from the rc2 blog post
+
+Signed-off-by: Mark Lodato <lodatom@gmail.com> (PR #794 - [Add quick RC2 announcement](https://github.com/slsa-framework/slsa/pull/794))
+🐛 **Bug Fixes**
+- Contact OpenAI to resolve quota issue.
