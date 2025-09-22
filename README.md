@@ -33,14 +33,14 @@ This tool is pre-configured out of the box for [spinnaker/spinnaker](https://git
 
 ## Features
 
-- Async fetching of commit and pull request data with automatic retries
-- Detailed pull request lookup via GitHub GraphQL API (PR number, title, URL)
-- OpenAI GPT-powered release notes generation with contextual awareness
-- Structured, categorized notes with sections for new features, bug fixes, changes, and documentation
-- Extensive logging and error handling for robust automated workflows
-- Modern packaging for easy installation and extension
-- Pytest-based test suite ensuring code quality and reliability
-- Shell script for out-of-the-box use with spinnaker/spinnaker example
+  - Async fetching of commit and pull request data with automatic retries
+  - Detailed pull request lookup via GitHub GraphQL API (PR number, title, URL)
+  - OpenAI GPT-powered release notes generation with contextual awareness
+  - Structured, categorized notes with sections for new features, bug fixes, changes, and documentation
+  - Extensive logging and error handling for robust automated workflows
+  - Modern packaging for easy installation and extension
+  - Pytest-based test suite ensuring code quality and reliability
+  - Shell script for out-of-the-box use with spinnaker/spinnaker example
 
 ---
 
@@ -48,45 +48,48 @@ This tool is pre-configured out of the box for [spinnaker/spinnaker](https://git
 
 Run the generator to produce release notes from official Spinnaker releases:
 
-generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
+    generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
 
-Sample output excerpt (`release_notes.txt`):
-
-Spinnaker Release 1.31.0 (from 1.30.0)
-
-🚀 New Features
-Enhanced canary analysis for multi-cloud pipelines (PR #123 - Add Canary Support)
-
-🐛 Bug Fixes
-Fixed ECR image tagging issues (PR #124 - Fix ECR Tagging)
-
-🔄 Changes
-Updated Kork building blocks
-
-📝 Documentation
-Expanded CI/CD guides
+  Sample output excerpt (`release_notes.txt`):
+        
+    Spinnaker Release 1.31.0 (from 1.30.0)
+    
+    🚀 New Features
+    Enhanced canary analysis for multi-cloud pipelines (PR #123 - Add Canary Support)
+    
+    🐛 Bug Fixes
+    Fixed ECR image tagging issues (PR #124 - Fix ECR Tagging)
+    
+    🔄 Changes
+    Updated Kork building blocks
+    
+    📝 Documentation
+    Expanded CI/CD guides
 
 ---
 
 ## Installation
 
 Clone the repository:
-git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git 
-cd ai-multi-agent-release-notes-generator 
-pip install .
+
+    git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git 
+    cd ai-multi-agent-release-notes-generator 
+    pip install .
 
 ---
 
 ## Usage
 
 1. Copy `.env.example` to `.env` and add your API keys:
-GITHUB_TOKEN=ghp_YourTokenWithRepoScope
-OPENAI_API_KEY=sk-YourOpenAIKey
+    
+        GITHUB_TOKEN=ghp_YourTokenWithRepoScope  
+        OPENAI_API_KEY=sk-YourOpenAIKey
 
-3. Run the release notes generator:
-generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
+2. Run the release notes generator:
 
-4. The release notes will be saved as `release_notes.txt` with categorized sections.
+        generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
+
+3. The release notes will be saved as `release_notes.txt` with categorized sections.
 
 ---
 
@@ -115,7 +118,8 @@ Please ensure tests pass and code is linted before submitting.
 ## Tests
 
 Run the test suite with:
-pytest
+
+    pytest
 
 ---
 
