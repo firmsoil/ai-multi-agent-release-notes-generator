@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "multi-agent-release-notes"
 version = "0.2.0"
 description = "Multi-agent release notes generator with async, retries, and logging"
-authors = [{name = "Anthropic AI Safety Team", email = "safety@anthropic.com"}]
+authors = [{name = "AI Team", email = "<ai_team>@<your_org>.com"}]
 dependencies = [
     "aiohttp>=3.9.0",
     "openai>=1.0.0",
