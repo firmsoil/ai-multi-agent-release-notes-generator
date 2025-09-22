@@ -24,7 +24,7 @@ A powerful async-powered tool to generate polished release notes from GitHub com
 
 ## About the Project
 
-The Multi-Agent Release Notes Generator automates the creation of high-quality release notes for a GitHub project by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to generate insightful, categorized release notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
+The Multi-AI-Agent Release Notes Generator automates the creation of high-quality release notes for a GitHub project by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to generate insightful, categorized release notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
 
 **Why Use This Tool?**
 - Saves time by automating release note generation.
