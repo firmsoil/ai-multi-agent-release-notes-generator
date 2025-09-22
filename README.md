@@ -136,6 +136,34 @@ Example Output (release_notes.txt)
 
 ---
 
+Local Testing with Samples
+Test the tool offline using sample data in samples/commits.txt and samples/pr.txt:
+
+    generate-release-notes --repo local --from-tag v0.1 --to-tag v0.2
+
+Reads commits from samples/commits.txt and PRs from samples/pr.txt.
+
+Associates PRs with commits based on message similarity.
+Outputs release_notes.txt with categorized notes, including PR details where applicable.
+
+Example Output (release_notes.txt)
+    
+    SLSA Release v1.0.0 (from v0.1.0)
+    
+    🚀 **New Features**
+    - Added supply-chain artifact verification (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
+    
+    🐛 **Bug Fixes**
+    - Fixed signing bug in GitHub Actions (PR #124 - [Fix Signing](https://github.com/firmsoil/slsa/pull/124))
+    
+    🔄 **Changes**
+    - Updated Shell scripts for SLSA compliance
+    
+    📝 **Documentation**
+    - Improved README for artifact provenance (PR #125 - [Update README for SLSA](https://github.com/firmsoil/slsa/pull/125))
+
+---
+
 ## Contributing
 
 Contributions are welcome! To contribute:
