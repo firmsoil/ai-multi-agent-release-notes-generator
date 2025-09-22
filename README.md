@@ -4,10 +4,9 @@
 
 A powerful, async-powered tool to generate polished release notes from GitHub commits and pull requests using AI.
 
-[Explore the Docs »][docs-url] · [Report Bug][issues-url] · [Request Feature][issues-url]
-
 ## Table of Contents
-- [About the Project](#about-the-projec)
+- [About the Project](#about-the-project)
+  - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -16,27 +15,16 @@ A powerful, async-powered tool to generate polished release notes from GitHub co
   - [Automation Script](#automation-script)
   - [GitHub Actions Workflow](#github-actions-workflow)
   - [Local Testing with Samples](#local-testing-with-samples)
+  - [Tests](#tests)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
 
-
-- [About](#about)
-- [Features](#features)
-- [Demo](#demo)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [Tests](#tests)
-- [License](#license)
-- [Contact](#contact)
-
 ## About the Project
 
-The Multi-Agent Release Notes Generator automates the creation of high-quality release notes by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to produce categorized notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
+The Multi-Agent Release Notes Generator automates the creation of high-quality release notes for a GitHub project by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to produce categorized notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
 
 **Why Use This Tool?**
 - Saves time by automating release note generation.
@@ -44,7 +32,7 @@ The Multi-Agent Release Notes Generator automates the creation of high-quality r
 - Leverages AI to produce engaging, user-friendly summaries.
 - Modular and extensible for any GitHub repository.
 
-Currently configured for `firmsoil/slsa`, but works with any repo (e.g., `spinnaker/spinnaker`).
+Currently configured for `firmsoil/slsa`, but works with any repositoruy.
 
 ([back to top](#multi-agent-release-notes-generator))
 
@@ -66,20 +54,6 @@ Follow these steps to set up the project locally and generate release notes.
 - **Python 3.10+**: Ensure you have Python 3.10 or higher installed.
   ```bash
   python3 --version
----
-
-## Table of Contents
-
-- [About](#about)
-- [Features](#features)
-- [Demo](#demo)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [Tests](#tests)
-- [License](#license)
-- [Contact](#contact)
 
 ---
 
@@ -190,12 +164,12 @@ To use Anthropic, set environment variable:
     LLM_PROVIDER=anthropic ./generate_release_notes.sh
 
     Sample console output:
-    text2025-09-22 01:XX:XX [info     ] Fetched commits                count=97 repo=firmsoil/slsa total_raw=97
-    2025-09-22 01:XX:XX [info     ] Commit and PR Summary          repo=firmsoil/slsa
-    2025-09-22 01:XX:XX [info     ] Commit details                 sha=92afd8b message=Add SLSA verification pr_info=PR #123 - Add Verification Workflow<a     
+    text2025-09-22 01:XX:XX [info] Fetched commits count=97 repo=firmsoil/slsa total_raw=97
+    2025-09-22 01:XX:XX [info] Commit and PR Summary repo=firmsoil/slsa
+    2025-09-22 01:XX:XX [info] Commit details sha=92afd8b message=Add SLSA verification pr_info=PR #123 - Add Verification Workflow<a     
     href="https://github.com/firmsoil/slsa/pull/123" target="_blank" rel="noopener noreferrer nofollow"></a>
-    2025-09-22 01:XX:XX [info     ] Commit details                 sha=abc1234 message=Fix signing bug pr_info=PR #124 - Fix Signing<a href="https://github.com/firmsoil/slsa/pull/124" 
-    target="_blank" rel="noopener noreferrer nofollow"></a>
+    2025-09-22 01:XX:XX [info] Commit details sha=abc1234 message=Fix signing bug pr_info=PR #124 - Fix Signing<a   
+    href="https://github.com/firmsoil/slsa/pull/124" target="_blank" rel="noopener noreferrer nofollow"></a>
     ...
 
 4. The release notes will be saved as `release_notes.txt` with categorized sections.
