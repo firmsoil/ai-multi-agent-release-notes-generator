@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful async-powered tool to generate polished release notes from GitHub commits and pull requests using AI.
+A powerful async-powered tool to generate release notes from GitHub commits and pull requests using AI.
 
 ## Table of Contents
 - [About the Project](#about-the-project)
