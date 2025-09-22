@@ -15,11 +15,20 @@ logger = structlog.get_logger()
 @click.option('--repo', required=True, help='GitHub repo (owner/repo) or "local" for sample data')
 @click.option('--from-tag', required=True, help='From tag')
 @click.option('--to-tag', required=True, help='To tag')
-async def cli(repo: str, from_tag: str, to_tag: str):
+@click.option('--llm-provider', default='openai', type=click.Choice(['openai', 'anthropic']), help='LLM provider (openai or anthropic)')
+async def cli(repo: str, from_tag: str, to_tag: str, llm_provider: str):
     github_token = os.getenv('GITHUB_TOKEN')
     openai_key = os.getenv('OPENAI_API_KEY')
-    if not github_token or not openai_key:
-        click.echo("Error: Set GITHUB_TOKEN and OPENAI_API_KEY in .env")
+    anthropic_key = os.getenv('ANTHROPIC_API_KEY')
+    
+    if not github_token:
+        click.echo("Error: Set GITHUB_TOKEN in .env")
+        return
+    if llm_provider == 'openai' and not openai_key:
+        click.echo("Error: Set OPENAI_API_KEY in .env for OpenAI provider")
+        return
+    if llm_provider == 'anthropic' and not anthropic_key:
+        click.echo("Error: Set ANTHROPIC_API_KEY in .env for Anthropic provider")
         return
 
     try:
@@ -71,10 +80,10 @@ async def cli(repo: str, from_tag: str, to_tag: str):
                 )
 
             from .llm_client import LLMClient
-            llm_client = LLMClient(openai_key)
+            llm_client = LLMClient.create(provider=llm_provider, openai_key=openai_key, anthropic_key=anthropic_key)
             notes = await llm_client.generate_notes(commits)
         else:
-            # Existing GitHub logic
+            # GitHub mode
             async with aiohttp.ClientSession() as session:
                 gh_client = GitHubClient(github_token)
                 commits = await gh_client.get_commits_between_tags(repo, from_tag, to_tag, session)
@@ -94,7 +103,7 @@ async def cli(repo: str, from_tag: str, to_tag: str):
                         pr_info=pr_info
                     )
 
-                notes = await generate_release_notes(repo, from_tag, to_tag, github_token, openai_key)
+                notes = await generate_release_notes(repo, from_tag, to_tag, github_token, llm_provider=llm_provider, openai_key=openai_key, anthropic_key=anthropic_key)
 
         # Save release notes
         with open('release_notes.txt', 'w') as f:
