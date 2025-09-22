@@ -1,9 +1,71 @@
-# ai-multi-agent-release-notes-generator
+# Multi-Agent AI Release Notes Generator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Multi-Agent Release Notes Generator — An advanced, modular, and async Python tool for automating the generation of structured release notes by aggregating GitHub repository commit data, pull request information, and OpenAI-powered summarization.
+A powerful, async-powered tool to generate polished release notes from GitHub commits and pull requests using AI.
 
+[Explore the Docs »][docs-url] · [Report Bug][issues-url] · [Request Feature][issues-url]
+
+## Table of Contents
+- [About the Project](#about-the-projec)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Command-Line Usage](#command-line-usage)
+  - [Automation Script](#automation-script)
+  - [GitHub Actions Workflow](#github-actions-workflow)
+  - [Local Testing with Samples](#local-testing-with-samples)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Acknowledgments](#acknowledgments)
+
+
+- [About](#about)
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [Tests](#tests)
+- [License](#license)
+- [Contact](#contact)
+
+## About the Project
+
+The Multi-Agent Release Notes Generator automates the creation of high-quality release notes by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to produce categorized notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
+
+**Why Use This Tool?**
+- Saves time by automating release note generation.
+- Enhances notes with PR details (number, title, URL) for traceability.
+- Leverages AI to produce engaging, user-friendly summaries.
+- Modular and extensible for any GitHub repository.
+
+Currently configured for `firmsoil/slsa`, but works with any repo (e.g., `spinnaker/spinnaker`).
+
+([back to top](#multi-agent-release-notes-generator))
+
+### Built With
+- [Python](https://www.python.org/)
+- [OpenAI](https://platform.openai.com/)
+- [Anthropic](https://www.anthropic.com/)
+- [aiohttp](https://docs.aiohttp.org/)
+- [Pydantic](https://pydantic-docs.helpmanual.io/)
+- [Click](https://click.palletsprojects.com/)
+
+([back to top](#multi-agent-release-notes-generator))
+
+## Getting Started
+
+Follow these steps to set up the project locally and generate release notes.
+
+### Prerequisites
+- **Python 3.10+**: Ensure you have Python 3.10 or higher installed.
+  ```bash
+  python3 --version
 ---
 
 ## Table of Contents
@@ -70,26 +132,73 @@ Run the generator to produce release notes from official Spinnaker releases:
 
 ## Installation
 
-Clone the repository:
+  1. Clone the repository:
+  
+          git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git 
+          cd ai-multi-agent-release-notes-generator 
+          pip install .
+  
+  2. Create a virtual environment:
+  
+          python3 -m venv venv
+          source venv/bin/activate
+  
+  3. Install dependencies:
+     
+         pip install -r requirements.txt
+         pip install .
 
-    git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git 
-    cd ai-multi-agent-release-notes-generator 
-    pip install .
+  4. Set up environment variables:
 
+    cp .env.example .env
+    nano .env
+
+  5. Add (include at least one API key based on your LLM provider):
+     
+          GITHUB_TOKEN=ghp_YourTokenWithRepoScope  
+          OPENAI_API_KEY=sk-YourOpenAIKey
+          ANTHROPIC_API_KEY=sk-ant-YourAnthropicKey
+     
 ---
 
 ## Usage
 
-1. Copy `.env.example` to `.env` and add your API keys:
-    
-        GITHUB_TOKEN=ghp_YourTokenWithRepoScope  
-        OPENAI_API_KEY=sk-YourOpenAIKey
+Generate release notes for any GitHub repository with commits and PRs. The tool fetches data asynchronously, retrieves PR details via GraphQL, and uses the specified LLM provider (OpenAI or Anthropic) to produce categorized notes.
 
-2. Run the release notes generator:
+### Command-Line Usage
 
-        generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
+Generate notes using OpenAI (default):
 
-3. The release notes will be saved as `release_notes.txt` with categorized sections.
+    generate-release-notes --repo firmsoil/slsa --from-tag v0.1.0 --to-tag v1.0.0
+
+Generate notes using Anthropic:
+
+    bashgenerate-release-notes --repo firmsoil/slsa --from-tag v0.1.0 --to-tag v1.0.0 --llm-provider anthropic
+
+Outputs release_notes.txt and logs commits/PRs to console (e.g., sha=92afd8b message=Add SLSA verification pr_info=PR #123).
+
+### Automation Script
+
+Run the default script for firmsoil/slsa (uses OpenAI by default):
+
+    ./generate_release_notes.sh
+
+Configured for firmsoil/slsa with tags v0.1.0 to v1.0.0.
+
+To use Anthropic, set environment variable:
+
+    LLM_PROVIDER=anthropic ./generate_release_notes.sh
+
+    Sample console output:
+    text2025-09-22 01:XX:XX [info     ] Fetched commits                count=97 repo=firmsoil/slsa total_raw=97
+    2025-09-22 01:XX:XX [info     ] Commit and PR Summary          repo=firmsoil/slsa
+    2025-09-22 01:XX:XX [info     ] Commit details                 sha=92afd8b message=Add SLSA verification pr_info=PR #123 - Add Verification Workflow<a     
+    href="https://github.com/firmsoil/slsa/pull/123" target="_blank" rel="noopener noreferrer nofollow"></a>
+    2025-09-22 01:XX:XX [info     ] Commit details                 sha=abc1234 message=Fix signing bug pr_info=PR #124 - Fix Signing<a href="https://github.com/firmsoil/slsa/pull/124" 
+    target="_blank" rel="noopener noreferrer nofollow"></a>
+    ...
+
+4. The release notes will be saved as `release_notes.txt` with categorized sections.
 
 ---
 
