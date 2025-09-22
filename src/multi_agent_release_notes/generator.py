@@ -1,26 +1,29 @@
-from .github_client import GitHubClient
 from .llm_client import LLMClient
-import asyncio
-import aiohttp
-from typing import List
-import structlog
+from .github_client import GitHubClient
 
-logger = structlog.get_logger()
+async def generate_release_notes(repo: str, from_tag: str, to_tag: str, github_token: str, llm_provider: str, openai_key: str | None, anthropic_key: str | None) -> str:
+    """
+    Generate release notes from commits between two tags for a given repository.
 
-async def generate_release_notes(repo: str, from_tag: str, to_tag: str, github_token: str, openai_key: str) -> str:
+    Args:
+        repo: GitHub repository in the format 'owner/repo'
+        from_tag: Starting tag
+        to_tag: Ending tag
+        github_token: GitHub personal access token
+        llm_provider: LLM provider ('openai' or 'anthropic')
+        openai_key: OpenAI API key
+        anthropic_key: Anthropic API key
+
+    Returns:
+        Formatted release notes as a string
+    """
+    gh_client = GitHubClient(github_token)
+    llm_client = LLMClient.create(provider=llm_provider, openai_key=openai_key, anthropic_key=anthropic_key)
+    
+    # Fetch commits
     async with aiohttp.ClientSession() as session:
-        gh_client = GitHubClient(github_token)
         commits = await gh_client.get_commits_between_tags(repo, from_tag, to_tag, session)
-        
-        llm_client = LLMClient(openai_key)
-        notes = await llm_client.generate_notes([
-            {
-                "message": c.message,
-                "pr_number": c.pr_number,
-                "pr_title": c.pr_title,
-                "pr_url": c.pr_url
-            } for c in commits
-        ])
-        
-        logger.info("Release notes generation complete", repo=repo)
-        return notes
+    
+    # Generate notes using LLM
+    notes = await llm_client.generate_notes(commits)
+    return notes
