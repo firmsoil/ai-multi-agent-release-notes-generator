@@ -24,7 +24,7 @@ A powerful, async-powered tool to generate polished release notes from GitHub co
 
 ## About the Project
 
-The Multi-Agent Release Notes Generator automates the creation of high-quality release notes for a GitHub project by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to produce categorized notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
+The Multi-Agent Release Notes Generator automates the creation of high-quality release notes for a GitHub project by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to generate insightful, categorized release notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
 
 **Why Use This Tool?**
 - Saves time by automating release note generation.
@@ -32,7 +32,7 @@ The Multi-Agent Release Notes Generator automates the creation of high-quality r
 - Leverages AI to produce engaging, user-friendly summaries.
 - Modular and extensible for any GitHub repository.
 
-Currently configured for `firmsoil/slsa`, but works with any repositoruy.
+This tool is pre-configured out of the box for [firmsoil/slsa](https://github.com/firmsoil/slsa) repository but is adaptable to any GitHub project with proper token setup.
 
 ([back to top](#multi-agent-release-notes-generator))
 
