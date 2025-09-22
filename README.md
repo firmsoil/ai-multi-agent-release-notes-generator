@@ -101,6 +101,41 @@ Clone the repository:
 
 ---
 
+## GitHub Actions Workflow
+
+Automate release note generation when pushing tags (e.g., v1.0.0):
+
+Trigger: Runs on tag pushes matching v* (semantic versioning).
+Process: Fetches the previous tag, generates notes using generate-release-notes, and commits release_notes.txt to the repository.
+Setup:
+
+Ensure the repository is hosted on GitHub.
+Add OPENAI_API_KEY as a repository secret in Settings > Secrets and variables > Actions.
+Push a tag:
+
+      git tag v1.0.0
+      git push origin v1.0.0
+
+Output: Check the Actions tab for logs. The generated release_notes.txt is committed to the repository.
+
+Example Output (release_notes.txt)
+
+    SLSA Release v1.0.0 (from v0.1.0)
+
+    🚀 **New Features**
+    - Added supply-chain artifact verification (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
+    
+    🐛 **Bug Fixes**
+    - Fixed signing bug in GitHub Actions (PR #124 - [Fix Signing](https://github.com/firmsoil/slsa/pull/124))
+    
+    🔄 **Changes**
+    - Updated Shell scripts for SLSA compliance
+    
+    📝 **Documentation**
+    - Improved README for artifact provenance
+
+---
+
 ## Contributing
 
 Contributions are welcome! To contribute:
