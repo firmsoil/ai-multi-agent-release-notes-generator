@@ -66,19 +66,19 @@ Follow these steps to set up the project locally and generate release notes.
   - Extensive logging and error handling for robust automated workflows
   - Modern packaging for easy installation and extension
   - Pytest-based test suite ensuring code quality and reliability
-  - Shell script for out-of-the-box use with spinnaker/spinnaker example
+  - Shell script for out-of-the-box use with firmsoil/slsa example
 
 ---
 
 ## Demo
 
-Run the generator to produce release notes from official Spinnaker releases:
+Run the generator to produce release notes from official slsa releases:
 
-    generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
+    generate-release-notes --repo firmsoil/slsa --from-tag release-1.30.0 --to-tag release-1.31.0
 
   Sample output excerpt (`release_notes.txt`):
         
-    Spinnaker Release 1.31.0 (from 1.30.0)
+    slsa Release 1.31.0 (from 1.30.0)
     
     🚀 New Features
     Enhanced canary analysis for multi-cloud pipelines (PR #123 - Add Canary Support)
