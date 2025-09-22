@@ -170,6 +170,7 @@ To use Anthropic, set environment variable:
 
 - **GITHUB_TOKEN**: GitHub Personal Access Token with repository scope to fetch data.
 - **OPENAI_API_KEY**: API key for OpenAI to enable AI-powered summarization.
+- **ANTHROPIC_API_KEY: API key for ANTHROPIC to enable AI-powered summarization.
 - Tags for releases can be customized based on target repository.
 
 ---
