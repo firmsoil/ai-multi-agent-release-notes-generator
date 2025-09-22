@@ -1,0 +1,5 @@
+123|Add Verification Workflow|https://github.com/firmsoil/slsa/pull/123
+124|Fix Signing|https://github.com/firmsoil/slsa/pull/124
+125|Update README for SLSA|https://github.com/firmsoil/slsa/pull/125
+126|Optimize Commit Parsing|https://github.com/firmsoil/slsa/pull/126
+127|Add Unit Tests for PR Lookup|https://github.com/firmsoil/slsa/pull/127
