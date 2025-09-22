@@ -57,16 +57,6 @@ Follow these steps to set up the project locally and generate release notes.
 
 ---
 
-## About
-
-Release notes are a critical part of software delivery, offering clear communication of changes, new features, and bug fixes between versions. This project refactors and enhances release notes generation into a scalable, async, error-resilient Python package.
-
-It supports integration with the GitHub GraphQL API to fetch detailed pull request context for each commit, and leverages OpenAI's language models to generate insightful, categorized release notes automatically.
-
-This tool is pre-configured out of the box for [spinnaker/spinnaker](https://github.com/spinnaker/spinnaker) repository but is adaptable to any GitHub project with proper token setup.
-
----
-
 ## Features
 
   - Async fetching of commit and pull request data with automatic retries
