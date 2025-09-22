@@ -268,3 +268,15 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 Project Link: [https://github.com/firmsoil/ai-multi-agent-release-notes-generator](https://github.com/firmsoil/ai-multi-agent-release-notes-generator)
+
+---
+
+## Acknowledgments
+
+    othneildrew/Best-README-Template
+    OpenAI
+    GitHub API
+    Pydantic
+    Structlog
+
+---
