@@ -70,23 +70,23 @@ Expanded CI/CD guides
 
 ## Installation
 
-Install via pip:
-pip install .
-
 Clone the repository:
-git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git cd ai-multi-agent-release-notes-generator pip install .
+git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git 
+cd ai-multi-agent-release-notes-generator 
+pip install .
 
 ---
 
 ## Usage
 
 1. Copy `.env.example` to `.env` and add your API keys:
-GITHUB_TOKEN=ghp_YourTokenWithRepoScope OPENAI_API_KEY=sk-YourOpenAIKey
+GITHUB_TOKEN=ghp_YourTokenWithRepoScope
+OPENAI_API_KEY=sk-YourOpenAIKey
 
-2. Run the release notes generator:
+3. Run the release notes generator:
 generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
 
-3. The release notes will be saved as `release_notes.txt` with categorized sections.
+4. The release notes will be saved as `release_notes.txt` with categorized sections.
 
 ---
 
