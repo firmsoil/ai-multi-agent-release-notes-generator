@@ -1,0 +1,59 @@
+name: Generate Release Notes on Tag Push
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on tags like v1.0.0
+
+jobs:
+  generate-notes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for committing changes
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for git commands
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
+
+    - name: Get previous tag
+      id: prev-tag
+      run: |
+        PREV_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1))
+        echo "previous_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+        echo "Previous tag: $PREV_TAG"
+
+    - name: Configure .env
+      run: |
+        echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" > .env
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+
+    - name: Generate release notes
+      env:
+        FROM_TAG: ${{ steps.prev-tag.outputs.previous_tag }}
+        TO_TAG: ${{ github.ref_name }}
+      run: |
+        ./generate_release_notes.sh
+
+    - name: Commit release_notes.txt
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add release_notes.txt
+        if git diff --staged --quiet; then
+          echo "No changes to commit."
+        else
+          git commit -m "Auto-generate release notes for tag ${{ github.ref_name }} [skip ci]"
+          git push
+        fi
