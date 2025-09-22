@@ -49,7 +49,7 @@ This tool is pre-configured out of the box for [spinnaker/spinnaker](https://git
 Run the generator to produce release notes from official Spinnaker releases:
 
 generate-release-notes --repo spinnaker/spinnaker --from-tag release-1.30.0 --to-tag release-1.31.0
-text
+
 Sample output excerpt (`release_notes.txt`):
 
 Spinnaker Release 1.31.0 (from 1.30.0)
