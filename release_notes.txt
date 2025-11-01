@@ -1,16 +1,12 @@
-## Fallback Release Notes (Quota Exceeded)
-🚀 **New Features**
-- Update landing page for v1.0 launch (PR #762 - [Update landing page for v1.0 launch](https://github.com/slsa-framework/slsa/pull/762))
-- Fix formatting (PR #762 - [Update landing page for v1.0 launch](https://github.com/slsa-framework/slsa/pull/762))
-- Update docs/index.md
+## Release Notes
 
-Co-authored-by: Andrew McNamara <arewm@users.noreply.github.com>
-Signed-off-by: olivekl <83081275+olivekl@users.noreply.github.com> (PR #762 - [Update landing page for v1.0 launch](https://github.com/slsa-framework/slsa/pull/762))
-- Add quick RC2 announcement
-
-Signed-off-by: Michael Lieberman <mlieberman85@gmail.com> (PR #794 - [Add quick RC2 announcement](https://github.com/slsa-framework/slsa/pull/794))
-- Link to rc2 version from the rc2 blog post
-
-Signed-off-by: Mark Lodato <lodatom@gmail.com> (PR #794 - [Add quick RC2 announcement](https://github.com/slsa-framework/slsa/pull/794))
-🐛 **Bug Fixes**
-- Contact OpenAI to resolve quota issue.
+- feat: add supply-chain artifact verification workflow (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
+- fix: resolve signing bug in GitHub Actions integration (PR #124 - [Fix Signing](https://github.com/firmsoil/slsa/pull/124))
+- docs: update README with SLSA compliance guidelines (PR #125 - [Update README for SLSA](https://github.com/firmsoil/slsa/pull/125))
+- refactor: optimize commit parsing for async fetches (PR #125 - [Update README for SLSA](https://github.com/firmsoil/slsa/pull/125))
+- test: add unit tests for PR GraphQL lookup (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
+- chore: update dependencies to latest versions (PR #125 - [Update README for SLSA](https://github.com/firmsoil/slsa/pull/125))
+- feat!: introduce breaking change in API endpoint (remove deprecated fields) (PR #127 - [Add Unit Tests for PR Lookup](https://github.com/firmsoil/slsa/pull/127))
+- perf: improve commit fetch speed by 30% with caching (PR #126 - [Optimize Commit Parsing](https://github.com/firmsoil/slsa/pull/126))
+- style: format code according to black standards (PR #125 - [Update README for SLSA](https://github.com/firmsoil/slsa/pull/125))
+- ci: add GitHub Actions workflow for auto-release notes (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
