@@ -1,283 +1,294 @@
-# ai-multi-agent-release-notes-generator
+# Multi-Agent Release Notes Generator
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-A powerful async-powered tool to generate release notes from GitHub commits and pull requests using AI.
-
-## Table of Contents
-- [About the Project](#about-the-project)
-  - [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-  - [Command-Line Usage](#command-line-usage)
-  - [Automation Script](#automation-script)
-  - [GitHub Actions Workflow](#github-actions-workflow)
-  - [Local Testing with Samples](#local-testing-with-samples)
-  - [Tests](#tests)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-- [Acknowledgments](#acknowledgments)
-
-## About the Project
-
-The Multi-AI-Agent  Notes Generator automates the creation of high-quality  notes for a GitHub project by analyzing GitHub commits and pull requests (PRs) with a multi-agent AI system. Built with modern Python, it uses async I/O, robust error handling, and supports multiple LLM providers (OpenAI's `gpt-3.5-turbo` or Anthropic's Claude) to generate insightful, categorized  notes (e.g., 🚀 New Features, 🐛 Bug Fixes) with PR context.
-
-**Why Use This Tool?**
-- Saves time by automating  note generation.
-- Enhances notes with PR details (number, title, URL) for traceability.
-- Leverages AI to produce engaging, user-friendly summaries.
-- Modular and extensible for any GitHub repository.
-
-This tool is pre-configured out of the box for [firmsoil/slsa](https://github.com/firmsoil/slsa) repository but is adaptable to any GitHub project with proper token setup.
-
-([back to top](#multi-agent-release-notes-generator))
-
-### Built With
-- [Python](https://www.python.org/)
-- [OpenAI](https://platform.openai.com/)
-- [Anthropic](https://www.anthropic.com/)
-- [aiohttp](https://docs.aiohttp.org/)
-- [Pydantic](https://pydantic-docs.helpmanual.io/)
-- [Click](https://click.palletsprojects.com/)
-
-([back to top](#multi-agent-release-notes-generator))
-
-## Getting Started
-
-Follow these steps to set up the project locally and generate release notes.
-
-### Prerequisites
-- **Python 3.10+**: Ensure you have Python 3.10 or higher installed.
-  ```bash
-  python3 --version
-
----
+A Python tool that generates professional release notes from GitHub commits and PRs using LLM providers (OpenAI or Anthropic). Supports both **Markdown** and **Confluence Storage Format** output.
 
 ## Features
 
-  - Async fetching of commit and pull request data with automatic retries
-  - Detailed pull request lookup via GitHub GraphQL API (PR number, title, URL)
-  - OpenAI GPT-powered release notes generation with contextual awareness
-  - Structured, categorized notes with sections for new features, bug fixes, changes, and documentation
-  - Extensive logging and error handling for robust automated workflows
-  - Modern packaging for easy installation and extension
-  - Pytest-based test suite ensuring code quality and reliability
-  - Shell script for out-of-the-box use with firmsoil/slsa example
-
----
-
-## Demo
-
-Run the generator to produce release notes from official slsa releases:
-
-    generate-release-notes --repo firmsoil/slsa --from-tag release-1.30.0 --to-tag release-1.31.0
-
-  Sample output excerpt (`release_notes.txt`):
-        
-    slsa Release 1.31.0 (from 1.30.0)
-    
-    🚀 New Features
-    Enhanced canary analysis for multi-cloud pipelines (PR #123 - Add Canary Support)
-    
-    🐛 Bug Fixes
-    Fixed ECR image tagging issues (PR #124 - Fix ECR Tagging)
-    
-    🔄 Changes
-    Updated Kork building blocks
-    
-    📝 Documentation
-    Expanded CI/CD guides
-
----
+- 🚀 **Dual Format Support**: Generate release notes in Markdown or Confluence format
+- 🤖 **Multi-LLM Support**: Choose between OpenAI (GPT) or Anthropic (Claude)
+- 📊 **Smart Categorization**: Automatically categorizes commits into New Features, Bug Fixes, Changes, etc.
+- 🔗 **PR Integration**: Links commits to their associated GitHub Pull Requests
+- 🎨 **Confluence Styling**: Color-coded panels and status badges for Confluence pages
+- 📝 **Local Mode**: Test with sample data without GitHub API calls
+- ⚡ **Async Operations**: Fast and efficient with async/await
 
 ## Installation
 
-  1. Clone the repository:
-  
-          git clone https://github.com/firmsoil/ai-multi-agent-release-notes-generator.git 
-          cd ai-multi-agent-release-notes-generator 
-          pip install .
-  
-  2. Create a virtual environment:
-  
-          python3 -m venv venv
-          source venv/bin/activate
-  
-  3. Install dependencies:
-     
-         pip install -r requirements.txt
-         pip install .
+```bash
+# Clone the repository
+git clone <repo-url>
+cd multi-agent-release-notes
 
-  4. Set up environment variables:
+# Install dependencies
+pip install -e .
 
-    cp .env.example .env
-    nano .env
+# Or with development dependencies
+pip install -e ".[dev]"
 
-  5. Add (include at least one API key based on your LLM provider):
-     
-          GITHUB_TOKEN=ghp_YourTokenWithRepoScope  
-          OPENAI_API_KEY=sk-YourOpenAIKey
-          ANTHROPIC_API_KEY=sk-ant-YourAnthropicKey
-     
----
+# Optional: Install Confluence API support
+pip install -e ".[confluence]"
+```
+
+## Setup
+
+Create a `.env` file in the project root:
+
+```bash
+# Required
+GITHUB_TOKEN=ghp_your_github_token_here
+
+# Choose one LLM provider
+OPENAI_API_KEY=sk-your_openai_key_here
+# OR
+ANTHROPIC_API_KEY=sk-ant-your_anthropic_key_here
+```
+
+### Getting API Keys
+
+- **GitHub Token**: [Create a Personal Access Token](https://github.com/settings/tokens) with `repo` scope
+- **OpenAI Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
+- **Anthropic Key**: Get from [Anthropic Console](https://console.anthropic.com/)
 
 ## Usage
 
-Generate release notes for any GitHub repository with commits and PRs. The tool fetches data asynchronously, retrieves PR details via GraphQL, and uses the specified LLM provider (OpenAI or Anthropic) to produce categorized notes.
+### Basic Command (Markdown Output)
 
-### Command-Line Usage
+```bash
+generate-release-notes \
+  --repo owner/repo \
+  --from-tag v1.0.0 \
+  --to-tag v1.1.0 \
+  --llm-provider openai
+```
 
-Generate notes using OpenAI (default):
+### Confluence Format Output
 
-    generate-release-notes --repo firmsoil/slsa --from-tag v0.1.0 --to-tag v1.0.0
+```bash
+generate-release-notes \
+  --repo owner/repo \
+  --from-tag v1.0.0 \
+  --to-tag v1.1.0 \
+  --llm-provider anthropic \
+  --format confluence \
+  --output release_notes_confluence.html
+```
 
-Generate notes using Anthropic:
+### Local Testing Mode
 
-    bashgenerate-release-notes --repo firmsoil/slsa --from-tag v0.1.0 --to-tag v1.0.0 --llm-provider anthropic
+```bash
+# Test with sample data (no API calls)
+generate-release-notes \
+  --repo local \
+  --from-tag v1.0.0 \
+  --to-tag v1.1.0 \
+  --llm-provider openai \
+  --format confluence
+```
 
-Outputs release_notes.txt and logs commits/PRs to console (e.g., sha=92afd8b message=Add SLSA verification pr_info=PR #123).
+## Command Line Options
 
-### Automation Script
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--repo` | GitHub repo (owner/repo) or "local" for samples | Required |
+| `--from-tag` | Starting tag/version | Required |
+| `--to-tag` | Ending tag/version | Required |
+| `--llm-provider` | LLM provider: `openai` or `anthropic` | `openai` |
+| `--format` | Output format: `markdown` or `confluence` | `markdown` |
+| `--output` | Output file name | `release_notes.txt` |
 
-Run the default script for firmsoil/slsa (uses OpenAI by default):
+## Output Formats
 
-    ./generate_release_notes.sh
+### Markdown Format
 
-Configured for firmsoil/slsa with tags v0.1.0 to v1.0.0.
+Standard GitHub-flavored markdown with emoji sections:
 
-To use Anthropic, set environment variable:
+```markdown
+## Release Notes
 
-    LLM_PROVIDER=anthropic ./generate_release_notes.sh
+🚀 **New Features**
+- Add user authentication (PR #123 - [Auth System](https://...))
+- Implement dark mode (PR #124 - [Dark Mode UI](https://...))
 
-    Sample console output:
-    text2025-09-22 01:XX:XX [info] Fetched commits count=97 repo=firmsoil/slsa total_raw=97
-    2025-09-22 01:XX:XX [info] Commit and PR Summary repo=firmsoil/slsa
-    2025-09-22 01:XX:XX [info] Commit details sha=92afd8b message=Add SLSA verification pr_info=PR #123 - Add Verification Workflow<a     
-    href="https://github.com/firmsoil/slsa/pull/123" target="_blank" rel="noopener noreferrer nofollow"></a>
-    2025-09-22 01:XX:XX [info] Commit details sha=abc1234 message=Fix signing bug pr_info=PR #124 - Fix Signing<a   
-    href="https://github.com/firmsoil/slsa/pull/124" target="_blank" rel="noopener noreferrer nofollow"></a>
-    ...
+🐛 **Bug Fixes**
+- Fix login redirect issue (PR #125 - [Login Fix](https://...))
+```
 
-4. The release notes will be saved as `release_notes.txt` with categorized sections.
+### Confluence Format
 
----
+Confluence Storage Format (XHTML) with colored panels and status badges:
 
-## Configuration
+```html
+<h1>Release Notes: v1.1.0</h1>
 
-- **GITHUB_TOKEN**: GitHub Personal Access Token with repository scope to fetch data.
-- **OPENAI_API_KEY**: API key for OpenAI to enable AI-powered summarization.
-- **ANTHROPIC_API_KEY: API key for ANTHROPIC to enable AI-powered summarization.
-- Tags for releases can be customized based on target repository.
+<ac:structured-macro ac:name="info">
+  <ac:rich-text-body>
+    <p><strong>Release Date:</strong> 2025-11-01</p>
+    <p><strong>Total Commits:</strong> 15</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
 
----
+<ac:structured-macro ac:name="panel">
+  <ac:parameter ac:name="bgColor">#E3FCEF</ac:parameter>
+  <ac:parameter ac:name="title">🚀 New Features</ac:parameter>
+  <ac:rich-text-body>
+    <ul>
+      <li><strong>Add authentication</strong> - <a href="...">PR #123</a>: Auth System</li>
+    </ul>
+  </ac:rich-text-body>
+</ac:structured-macro>
+```
 
-## GitHub Actions Workflow
+## Using Confluence Output
 
-Automate release notes generation when pushing tags (e.g., v1.0.0):
+### Method 1: Insert Markup (Recommended)
 
-Trigger: Runs on tag pushes matching v* (semantic versioning).
-Process: Fetches the previous tag, generates notes using generate-release-notes, and commits release_notes.txt to the repository.
-Setup:
+1. Open your Confluence page in edit mode
+2. Click the **`</>`** (Insert markup) button in the toolbar
+3. Copy the contents of your output file
+4. Paste into the markup editor
+5. Click **Insert**
 
-Ensure the repository is hosted on GitHub.
-Add OPENAI_API_KEY as a repository secret in Settings > Secrets and variables > Actions.
-Push a tag:
+### Method 2: Source Editor
 
-      git tag v1.0.0
-      git push origin v1.0.0
+1. Edit your Confluence page
+2. Click **···** (More) → **View source**
+3. Paste the Confluence-formatted content
+4. Save the page
 
-Output: Check the Actions tab for logs. The generated release_notes.txt is committed to the repository.
+## Project Structure
 
-Example Output (release_notes.txt)
+```
+multi-agent-release-notes/
+├── src/
+│   └── multi_agent_release_notes/
+│       ├── __init__.py
+│       ├── main.py                    # CLI entry point
+│       ├── generator.py               # Main orchestration
+│       ├── github_client.py           # GitHub API client
+│       ├── llm_client.py              # LLM provider abstraction
+│       └── confluence_formatter.py    # Confluence format converter
+├── samples/
+│   ├── commits.txt                    # Sample commit data
+│   └── pr.txt                         # Sample PR data
+├── pyproject.toml
+├── requirements.txt
+├── .env
+└── README.md
+```
 
-    SLSA Release v1.0.0 (from v0.1.0)
+## Confluence Styling Reference
 
-    🚀 **New Features**
-    - Added supply-chain artifact verification (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
-    
-    🐛 **Bug Fixes**
-    - Fixed signing bug in GitHub Actions (PR #124 - [Fix Signing](https://github.com/firmsoil/slsa/pull/124))
-    
-    🔄 **Changes**
-    - Updated Shell scripts for SLSA compliance
-    
-    📝 **Documentation**
-    - Improved README for artifact provenance
+The tool uses these color schemes for Confluence panels:
 
----
+| Category | Emoji | Color | Hex Code |
+|----------|-------|-------|----------|
+| New Features | 🚀 | Green | #E3FCEF |
+| Bug Fixes | 🐛 | Red | #FFEBE6 |
+| Changes | 📄 | Blue | #DEEBFF |
+| Documentation | 📝 | Grey | #F4F5F7 |
+| Style | 💅 | Yellow | #FFF0B3 |
+| Tests | 🧪 | Purple | #EAE6FF |
 
-Local Testing with Samples
-Test the tool offline using sample data in samples/commits.txt and samples/pr.txt:
+## Examples
 
-    generate-release-notes --repo local --from-tag v0.1 --to-tag v0.2
+### Example 1: Generate Markdown Notes
 
-Reads commits from samples/commits.txt and PRs from samples/pr.txt.
+```bash
+generate-release-notes \
+  --repo facebook/react \
+  --from-tag v18.0.0 \
+  --to-tag v18.1.0 \
+  --llm-provider openai
+```
 
-Associates PRs with commits based on message similarity.
-Outputs release_notes.txt with categorized notes, including PR details where applicable.
+Output: `release_notes.txt` (Markdown)
 
-Example Output (release_notes.txt)
-    
-    SLSA Release v1.0.0 (from v0.1.0)
-    
-    🚀 **New Features**
-    - Added supply-chain artifact verification (PR #123 - [Add Verification Workflow](https://github.com/firmsoil/slsa/pull/123))
-    
-    🐛 **Bug Fixes**
-    - Fixed signing bug in GitHub Actions (PR #124 - [Fix Signing](https://github.com/firmsoil/slsa/pull/124))
-    
-    🔄 **Changes**
-    - Updated Shell scripts for SLSA compliance
-    
-    📝 **Documentation**
-    - Improved README for artifact provenance (PR #125 - [Update README for SLSA](https://github.com/firmsoil/slsa/pull/125))
+### Example 2: Generate Confluence Notes with Claude
 
----
+```bash
+generate-release-notes \
+  --repo kubernetes/kubernetes \
+  --from-tag v1.28.0 \
+  --to-tag v1.29.0 \
+  --llm-provider anthropic \
+  --format confluence \
+  --output k8s_release_v1.29.html
+```
 
-## Contributing
+Output: `k8s_release_v1.29.html` (Confluence XHTML)
 
-Contributions are welcome! To contribute:
+### Example 3: Test Locally
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a pull request
+```bash
+# First, create sample files
+mkdir -p samples
+echo "Fix authentication bug
+Add user profile page
+Update documentation" > samples/commits.txt
 
-Please ensure tests pass and code is linted before submitting.
+echo "123|Auth Bug Fix|https://github.com/org/repo/pull/123
+124|User Profile|https://github.com/org/repo/pull/124" > samples/pr.txt
 
----
+# Generate notes
+generate-release-notes \
+  --repo local \
+  --from-tag v1.0.0 \
+  --to-tag v1.1.0 \
+  --format confluence
+```
 
-## Tests
+## Troubleshooting
 
-Run the test suite with:
+### "Error: Set GITHUB_TOKEN in .env"
+- Ensure your `.env` file exists and contains a valid GitHub token
+- Check token permissions (needs `repo` scope)
 
-    pytest
+### "OpenAI API error" or "Anthropic API error"
+- Verify your API key is correct
+- Check your API quota/credits
+- The tool will fallback to basic formatting if LLM fails
 
----
+### Confluence Format Not Rendering
+- Ensure you're using the "Insert markup" method
+- Check for any HTML validation errors
+- Try the source editor method instead
+
+### Rate Limiting
+- GitHub API: 5,000 requests/hour (authenticated)
+- Add delays between requests if processing many tags
+- Use local mode for testing to avoid API calls
+
+## Development
+
+### Running Tests
+
+```bash
+# Install dev dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run with coverage
+pytest --cov=multi_agent_release_notes
+```
+
+### Adding New Features
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+MIT License - see LICENSE file for details
 
----
+## Contributing
 
-## Contact
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Project Link: [https://github.com/firmsoil/ai-multi-agent-release-notes-generator](https://github.com/firmsoil/ai-multi-agent-release-notes-generator)
+## Support
 
----
-
-## Acknowledgments
-
-    othneildrew/Best-README-Template
-    OpenAI
-    GitHub API
-    Pydantic
-    Structlog
-
----
+For issues, questions, or contributions, please open an issue on GitHub.
