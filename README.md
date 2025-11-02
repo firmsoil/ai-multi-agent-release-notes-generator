@@ -159,23 +159,21 @@ Confluence Storage Format (XHTML) with colored panels and status badges:
 
 ```
 multi-agent-release-notes/
-├── generate_release_notes.sh
-├── pyproject.toml.backup
-├── README.md
-├── release_confluence.html
-├── release_notes.txt
+├── src/
+│   └── multi_agent_release_notes/
+│       ├── __init__.py
+│       ├── main.py                    # CLI entry point
+│       ├── generator.py               # Main orchestration
+│       ├── github_client.py           # GitHub API client
+│       ├── llm_client.py              # LLM provider abstraction
+│       └── confluence_formatter.py    # Confluence format converter
+├── samples/
+│   ├── commits.txt                    # Sample commit data
+│   └── pr.txt                         # Sample PR data
+├── pyproject.toml
 ├── requirements.txt
-├── samples
-│   ├── commits.txt
-│   └── pr.txt
-├── setup.py
-└── src
-    ├── __init__.py
-    ├── confluence_formatter.py
-    ├── generator.py
-    ├── github_client.py
-    ├── llm_client.py
-    └── main.py
+├── .env
+└── README.md
 ```
 
 ## Confluence Styling Reference
