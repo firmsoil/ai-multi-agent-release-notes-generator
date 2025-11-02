@@ -1,61 +1,98 @@
 # Multi-Agent Release Notes Generator
 
-A Python tool that generates professional release notes from GitHub commits and PRs using LLM providers (OpenAI or Anthropic). Supports both **Markdown** and **Confluence Storage Format** output.
+A Python CLI tool that generates professional release notes from GitHub commits and PRs using AI (OpenAI GPT, Anthropic Claude, or Google Gemini). Supports both **Markdown** and **Confluence Storage Format** output.
 
-## Features
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-- 🚀 **Dual Format Support**: Generate release notes in Markdown or Confluence format
-- 🤖 **Multi-LLM Support**: Choose between OpenAI (GPT) or Anthropic (Claude)
-- 📊 **Smart Categorization**: Automatically categorizes commits into New Features, Bug Fixes, Changes, etc.
-- 🔗 **PR Integration**: Links commits to their associated GitHub Pull Requests
+## ✨ Features
+
+- 🤖 **Multi-LLM Support**: Choose between OpenAI (GPT), Anthropic (Claude), or Google (Gemini)
+- 📊 **Dual Format Output**: Generate in Markdown or Confluence Storage Format (XHTML)
+- 🔗 **Smart PR Integration**: Automatically links commits to their GitHub Pull Requests
 - 🎨 **Confluence Styling**: Color-coded panels and status badges for Confluence pages
-- 📝 **Local Mode**: Test with sample data without GitHub API calls
+- 📝 **Local Testing Mode**: Test without API calls using sample data
 - ⚡ **Async Operations**: Fast and efficient with async/await
+- 🏷️ **Smart Categorization**: Auto-categorizes into Features, Bug Fixes, Documentation, etc.
+- 🔄 **Automatic Fallbacks**: Falls back gracefully if LLM APIs fail
 
-## Installation
+## 📦 Installation
+
+### Prerequisites
+
+- Python 3.10 or higher
+- Git
+- GitHub Personal Access Token
+- API key for at least one LLM provider (OpenAI, Anthropic, or Google)
+
+### Quick Install
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone <your-repo-url>
 cd multi-agent-release-notes
 
-# Install dependencies
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate  # On macOS/Linux
+# OR
+venv\Scripts\activate     # On Windows
+
+# Install the package
 pip install -e .
 
-# Or with development dependencies
-pip install -e ".[dev]"
-
-# Optional: Install Confluence API support
-pip install -e ".[confluence]"
+# Verify installation
+generate-release-notes --help
 ```
 
-## Setup
+## 🔑 Setup
+
+### 1. Create `.env` File
 
 Create a `.env` file in the project root:
 
 ```bash
 # Required
-GITHUB_TOKEN=ghp_your_github_token_here
+GITHUB_TOKEN=ghp_your_github_personal_access_token_here
 
-# Choose one LLM provider
-OPENAI_API_KEY=sk-your_openai_key_here
-# OR
-ANTHROPIC_API_KEY=sk-ant-your_anthropic_key_here
+# At least ONE of these LLM providers is required:
+OPENAI_API_KEY=sk-your_openai_api_key_here
+ANTHROPIC_API_KEY=sk-ant-your_anthropic_api_key_here
+GEMINI_API_KEY=your_google_gemini_api_key_here
 ```
 
-### Getting API Keys
+### 2. Get API Keys
 
-- **GitHub Token**: [Create a Personal Access Token](https://github.com/settings/tokens) with `repo` scope
-- **OpenAI Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
-- **Anthropic Key**: Get from [Anthropic Console](https://console.anthropic.com/)
+**GitHub Token:**
+- Go to [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
+- Click "Generate new token (classic)"
+- Select scopes: `repo` (for private repos) or `public_repo` (for public repos only)
+- Copy the token to your `.env` file
 
-## Usage
+**OpenAI API Key:**
+- Visit [OpenAI Platform](https://platform.openai.com/api-keys)
+- Create new secret key
+- Copy to `.env` file
+
+**Anthropic API Key:**
+- Visit [Anthropic Console](https://console.anthropic.com/)
+- Generate API key
+- Copy to `.env` file
+
+**Google Gemini API Key:**
+- Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+- Create API key
+- Copy to `.env` file
+
+## 🚀 Usage
 
 ### Basic Command (Markdown Output)
 
 ```bash
 generate-release-notes \
-  --repo owner/repo \
+  --repo owner/repository \
   --from-tag v1.0.0 \
   --to-tag v1.1.0 \
   --llm-provider openai
@@ -65,7 +102,7 @@ generate-release-notes \
 
 ```bash
 generate-release-notes \
-  --repo owner/repo \
+  --repo owner/repository \
   --from-tag v1.0.0 \
   --to-tag v1.1.0 \
   --llm-provider anthropic \
@@ -73,30 +110,59 @@ generate-release-notes \
   --output release_notes_confluence.html
 ```
 
-### Local Testing Mode
+### Local Testing Mode (No GitHub API Calls)
 
 ```bash
-# Test with sample data (no API calls)
+# Create sample files first
+mkdir -p samples
+
+cat > samples/commits.txt << 'EOF'
+feat: add user authentication system
+fix: resolve memory leak in data processor
+docs: update API documentation
+test: add unit tests for auth module
+EOF
+
+cat > samples/pr.txt << 'EOF'
+123|Add Authentication|https://github.com/org/repo/pull/123
+124|Fix Memory Leak|https://github.com/org/repo/pull/124
+EOF
+
+# Generate release notes from samples
 generate-release-notes \
   --repo local \
   --from-tag v1.0.0 \
-  --to-tag v1.1.0 \
-  --llm-provider openai \
-  --format confluence
+  --to-tag v2.0.0 \
+  --llm-provider openai
 ```
 
-## Command Line Options
+### Using the Shell Script
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--repo` | GitHub repo (owner/repo) or "local" for samples | Required |
-| `--from-tag` | Starting tag/version | Required |
-| `--to-tag` | Ending tag/version | Required |
-| `--llm-provider` | LLM provider: `openai` or `anthropic` | `openai` |
-| `--format` | Output format: `markdown` or `confluence` | `markdown` |
-| `--output` | Output file name | `release_notes.txt` |
+```bash
+# Make it executable
+chmod +x generate_release_notes.sh
 
-## Output Formats
+# Use with environment variables
+REPO=owner/repo \
+FROM_TAG=v1.0.0 \
+TO_TAG=v2.0.0 \
+LLM_PROVIDER=anthropic \
+FORMAT=confluence \
+./generate_release_notes.sh
+```
+
+## 📋 Command Line Options
+
+| Option | Description | Default | Required |
+|--------|-------------|---------|----------|
+| `--repo` | GitHub repository (owner/repo) or "local" | - | ✅ Yes |
+| `--from-tag` | Starting git tag | - | ✅ Yes |
+| `--to-tag` | Ending git tag | - | ✅ Yes |
+| `--llm-provider` | AI provider: `openai`, `anthropic`, or `google` | `openai` | No |
+| `--format` | Output format: `markdown` or `confluence` | `markdown` | No |
+| `--output` | Output file name | `release_notes.txt` | No |
+
+## 📝 Output Formats
 
 ### Markdown Format
 
@@ -106,24 +172,27 @@ Standard GitHub-flavored markdown with emoji sections:
 ## Release Notes
 
 🚀 **New Features**
-- Add user authentication (PR #123 - [Auth System](https://...))
+- Add user authentication system (PR #123 - [Add Authentication](https://...))
 - Implement dark mode (PR #124 - [Dark Mode UI](https://...))
 
 🐛 **Bug Fixes**
 - Fix login redirect issue (PR #125 - [Login Fix](https://...))
+
+📝 **Documentation**
+- Update API documentation (PR #126 - [API Docs](https://...))
 ```
 
 ### Confluence Format
 
-Confluence Storage Format (XHTML) with colored panels and status badges:
+Confluence Storage Format (XHTML) with colored panels:
 
 ```html
 <h1>Release Notes: v1.1.0</h1>
 
 <ac:structured-macro ac:name="info">
   <ac:rich-text-body>
-    <p><strong>Release Date:</strong> 2025-11-01</p>
-    <p><strong>Total Commits:</strong> 15</p>
+    <p><strong>Release Date:</strong> 2024-11-02</p>
+    <p><strong>Total Commits:</strong> 25</p>
   </ac:rich-text-body>
 </ac:structured-macro>
 
@@ -138,13 +207,13 @@ Confluence Storage Format (XHTML) with colored panels and status badges:
 </ac:structured-macro>
 ```
 
-## Using Confluence Output
+## 📤 Using Confluence Output
 
 ### Method 1: Insert Markup (Recommended)
 
 1. Open your Confluence page in edit mode
 2. Click the **`</>`** (Insert markup) button in the toolbar
-3. Copy the contents of your output file
+3. Copy the entire contents of your output file
 4. Paste into the markup editor
 5. Click **Insert**
 
@@ -155,110 +224,158 @@ Confluence Storage Format (XHTML) with colored panels and status badges:
 3. Paste the Confluence-formatted content
 4. Save the page
 
-## Project Structure
+## 🎨 Confluence Color Scheme
+
+| Category | Emoji | Panel Color | Hex Code |
+|----------|-------|-------------|----------|
+| New Features | 🚀 | Light Green | #E3FCEF |
+| Bug Fixes | 🐛 | Light Red | #FFEBE6 |
+| Changes | 📄 | Light Blue | #DEEBFF |
+| Documentation | 📝 | Light Grey | #F4F5F7 |
+| Style | 💅 | Light Yellow | #FFF0B3 |
+| Tests | 🧪 | Light Purple | #EAE6FF |
+
+## 🛠️ Project Structure
 
 ```
 multi-agent-release-notes/
 ├── src/
-│   └── multi_agent_release_notes/
-│       ├── __init__.py
-│       ├── main.py                    # CLI entry point
-│       ├── generator.py               # Main orchestration
-│       ├── github_client.py           # GitHub API client
-│       ├── llm_client.py              # LLM provider abstraction
-│       └── confluence_formatter.py    # Confluence format converter
+│   ├── main.py                    # CLI entry point
+│   ├── generator.py               # Main orchestration logic
+│   ├── github_client.py           # GitHub API client with GraphQL
+│   ├── llm_client.py              # Multi-LLM provider abstraction
+│   └── confluence_formatter.py    # Confluence XHTML formatter
 ├── samples/
-│   ├── commits.txt                    # Sample commit data
-│   └── pr.txt                         # Sample PR data
-├── pyproject.toml
-├── requirements.txt
-├── .env
+│   ├── commits.txt                # Sample commit data
+│   └── pr.txt                     # Sample PR data
+├── setup.py                       # Package configuration
+├── .env                           # API keys (create this)
+├── generate_release_notes.sh     # Convenience script
 └── README.md
 ```
 
-## Confluence Styling Reference
+## 🔧 Advanced Usage
 
-The tool uses these color schemes for Confluence panels:
-
-| Category | Emoji | Color | Hex Code |
-|----------|-------|-------|----------|
-| New Features | 🚀 | Green | #E3FCEF |
-| Bug Fixes | 🐛 | Red | #FFEBE6 |
-| Changes | 📄 | Blue | #DEEBFF |
-| Documentation | 📝 | Grey | #F4F5F7 |
-| Style | 💅 | Yellow | #FFF0B3 |
-| Tests | 🧪 | Purple | #EAE6FF |
-
-## Examples
-
-### Example 1: Generate Markdown Notes
+### Environment Variables
 
 ```bash
-generate-release-notes \
-  --repo facebook/react \
-  --from-tag v18.0.0 \
-  --to-tag v18.1.0 \
-  --llm-provider openai
+# Set these in your shell or .env file
+export GITHUB_TOKEN=ghp_...
+export OPENAI_API_KEY=sk-...
+export ANTHROPIC_API_KEY=sk-ant-...
+export GEMINI_API_KEY=...
+
+# Override defaults
+export REPO=owner/repo
+export FROM_TAG=v1.0.0
+export TO_TAG=v2.0.0
+export LLM_PROVIDER=anthropic
+export FORMAT=confluence
+
+# Run with environment variables
+./generate_release_notes.sh
 ```
 
-Output: `release_notes.txt` (Markdown)
-
-### Example 2: Generate Confluence Notes with Claude
+### Testing Different LLM Providers
 
 ```bash
-generate-release-notes \
-  --repo kubernetes/kubernetes \
-  --from-tag v1.28.0 \
-  --to-tag v1.29.0 \
-  --llm-provider anthropic \
-  --format confluence \
-  --output k8s_release_v1.29.html
+# OpenAI GPT-3.5 Turbo (fast, cost-effective)
+generate-release-notes ... --llm-provider openai
+
+# Anthropic Claude 3 Haiku (fast, high quality)
+generate-release-notes ... --llm-provider anthropic
+
+# Google Gemini Pro (free tier available)
+generate-release-notes ... --llm-provider google
 ```
 
-Output: `k8s_release_v1.29.html` (Confluence XHTML)
-
-### Example 3: Test Locally
+### Batch Processing Multiple Releases
 
 ```bash
-# First, create sample files
-mkdir -p samples
-echo "Fix authentication bug
-Add user profile page
-Update documentation" > samples/commits.txt
+#!/bin/bash
+# batch_generate.sh
 
-echo "123|Auth Bug Fix|https://github.com/org/repo/pull/123
-124|User Profile|https://github.com/org/repo/pull/124" > samples/pr.txt
+RELEASES=(
+  "v1.0.0:v1.1.0"
+  "v1.1.0:v1.2.0"
+  "v1.2.0:v2.0.0"
+)
 
-# Generate notes
-generate-release-notes \
-  --repo local \
-  --from-tag v1.0.0 \
-  --to-tag v1.1.0 \
-  --format confluence
+for release in "${RELEASES[@]}"; do
+  IFS=':' read -r from to <<< "$release"
+  generate-release-notes \
+    --repo owner/repo \
+    --from-tag "$from" \
+    --to-tag "$to" \
+    --output "release_${to}.md"
+done
 ```
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
-### "Error: Set GITHUB_TOKEN in .env"
-- Ensure your `.env` file exists and contains a valid GitHub token
-- Check token permissions (needs `repo` scope)
+### Common Issues
 
-### "OpenAI API error" or "Anthropic API error"
-- Verify your API key is correct
-- Check your API quota/credits
-- The tool will fallback to basic formatting if LLM fails
+**Issue: "GITHUB_TOKEN not found"**
+```bash
+# Solution: Create .env file with your token
+echo "GITHUB_TOKEN=ghp_your_token_here" > .env
+```
 
-### Confluence Format Not Rendering
-- Ensure you're using the "Insert markup" method
-- Check for any HTML validation errors
-- Try the source editor method instead
+**Issue: "Repository not found (404)"**
+```bash
+# Solution: Check repository name and access
+# Run diagnostic:
+python check_github_access.py
+
+# Verify repo name format: owner/repository
+# Check if repo is private (requires token with repo scope)
+```
+
+**Issue: "Tags not found (404)"**
+```bash
+# Solution: List available tags
+curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+  https://api.github.com/repos/owner/repo/tags
+
+# Use exact tag names (case-sensitive)
+```
+
+**Issue: "Anthropic API error (404)"**
+```bash
+# Solution: Model not available with your API key
+# Run diagnostic:
+python check_anthropic_models.py
+
+# Or use a different provider:
+generate-release-notes ... --llm-provider openai
+```
+
+**Issue: "No module named 'main'"**
+```bash
+# Solution: Reinstall the package
+pip uninstall multi-agent-release-notes -y
+pip install -e .
+```
+
+### Debug Mode
+
+```bash
+# Enable verbose logging
+export LOG_LEVEL=DEBUG
+
+# Check what's happening
+generate-release-notes ... 2>&1 | tee debug.log
+```
 
 ### Rate Limiting
-- GitHub API: 5,000 requests/hour (authenticated)
-- Add delays between requests if processing many tags
-- Use local mode for testing to avoid API calls
 
-## Development
+GitHub API has rate limits:
+- **Authenticated**: 5,000 requests/hour
+- **Unauthenticated**: 60 requests/hour
+
+Always use `GITHUB_TOKEN` for authenticated requests.
+
+## 🧪 Development
 
 ### Running Tests
 
@@ -269,26 +386,100 @@ pip install -e ".[dev]"
 # Run tests
 pytest
 
-# Run with coverage
-pytest --cov=multi_agent_release_notes
+# With coverage
+pytest --cov=src tests/
 ```
 
-### Adding New Features
+### Code Quality
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+```bash
+# Format code
+black src/
 
-## License
+# Sort imports
+isort src/
 
-MIT License - see LICENSE file for details
+# Type checking
+mypy src/
 
-## Contributing
+# Linting
+flake8 src/
+```
+
+## 📊 Examples
+
+### Example 1: Open Source Project
+
+```bash
+generate-release-notes \
+  --repo kubernetes/kubernetes \
+  --from-tag v1.28.0 \
+  --to-tag v1.29.0 \
+  --llm-provider anthropic \
+  --format markdown
+```
+
+### Example 2: Internal Project with Confluence
+
+```bash
+generate-release-notes \
+  --repo myorg/internal-api \
+  --from-tag v2.1.0 \
+  --to-tag v2.2.0 \
+  --llm-provider openai \
+  --format confluence \
+  --output confluence_v2.2.0.html
+```
+
+### Example 3: Testing Locally
+
+```bash
+# No API calls needed!
+generate-release-notes \
+  --repo local \
+  --from-tag v1.0.0 \
+  --to-tag v2.0.0 \
+  --llm-provider openai
+```
+
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Support
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-For issues, questions, or contributions, please open an issue on GitHub.
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [OpenAI](https://openai.com/), [Anthropic](https://www.anthropic.com/), and [Google AI](https://ai.google/)
+- GitHub API for commit and PR data
+- Inspired by the need for automated, high-quality release documentation
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourorg/multi-agent-release-notes/issues)
+- **Documentation**: This README
+- **Discussions**: [GitHub Discussions](https://github.com/yourorg/multi-agent-release-notes/discussions)
+
+## 🗺️ Roadmap
+
+- [ ] Custom templates for output formatting
+- [ ] Direct Confluence API integration for auto-publishing
+- [ ] Slack/Teams webhook notifications
+- [ ] PDF export support
+- [ ] Web UI for non-technical users
+- [ ] Docker container for easy deployment
+- [ ] GitHub Action for automated release notes
+
+---
+
+**Made with ❤️ by the AI Team**
+
+*Generate professional release notes in seconds, not hours!*
